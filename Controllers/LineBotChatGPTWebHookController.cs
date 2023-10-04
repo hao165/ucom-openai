@@ -56,21 +56,27 @@ namespace isRock.Template
 
     public class ChatGPT
     {
+        const string AzureOpenAIEndpoint = "https://testopenai202303.openai.azure.com";  //👉replace it with your Azure OpenAI Endpoint
+        const string AzureOpenAIModelName = "gpt35"; //👉repleace it with your Azure OpenAI Model Name
+        const string AzureOpenAIToken = "e36f3396dee8495eaf8c909440da94da"; //👉repleace it with your Azure OpenAI Token
+        const string AzureOpenAIVersion = "2023-03-15-preview";  //👉replace  it with your Azure OpenAI Model Version
+
         [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public enum role
         {
             assistant, user, system
         }
 
-        public static string CallOpenAIChatAPI(object requestData)
+        public static string CallAzureOpenAIChatAPI(
+            string endpoint, string modelName, string apiKey, string apiVersion, object requestData)
         {
             var client = new HttpClient();
 
             // 設定 API 網址
-            var apiUrl = $"https://api.openai.com/v1/chat/completions";
+            var apiUrl = $"https://testopenai202303.openai.azure.com/openai/deployments/gpt35/chat/completions?api-version=2023-03-15-preview";
 
             // 設定 HTTP request headers
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer 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");
+            client.DefaultRequestHeaders.Add("api-key", apiKey);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT heade
             // 將 requestData 物件序列化成 JSON 字串
             string jsonRequestData = Newtonsoft.Json.JsonConvert.SerializeObject(requestData);
@@ -87,7 +93,9 @@ namespace isRock.Template
 
         public static string getResponseFromGPT(string Message)
         {
-            return ChatGPT.CallOpenAIChatAPI(
+            return ChatGPT.CallAzureOpenAIChatAPI(
+               AzureOpenAIEndpoint, AzureOpenAIModelName, AzureOpenAIToken, AzureOpenAIVersion,
+                //ref: https://learn.microsoft.com/en-us/azure/cognitive-services/openai/reference#chat-completions
                 new
                 {
                     model = "gpt-3.5-turbo",
