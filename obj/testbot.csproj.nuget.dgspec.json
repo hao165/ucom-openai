@@ -43,17 +43,13 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "dependencies": {
-            "Swashbuckle.AspNetCore": {
+            "Azure.AI.OpenAI": {
               "target": "Package",
-              "version": "[5.6.3, )"
+              "version": "[1.0.0-beta.5, )"
             },
-            "azure.ai.openai": {
+            "Microsoft.CognitiveServices.Speech": {
               "target": "Package",
-              "version": "[1.0.0-beta.8, )"
-            },
-            "linebotsdk": {
-              "target": "Package",
-              "version": "[2.11.38, )"
+              "version": "[1.32.1, )"
             }
           },
           "imports": [
@@ -67,9 +63,6 @@
           "assetTargetFallback": true,
           "warn": true,
           "frameworkReferences": {
-            "Microsoft.AspNetCore.App": {
-              "privateAssets": "none"
-            },
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
