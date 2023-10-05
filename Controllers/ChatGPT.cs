@@ -50,7 +50,7 @@ namespace isRock.Template
                     {
                         new ChatMessage {
                             role = Role.system ,
-                            content = @"你現在是一個會判斷intent entities的AI，key有intent為字串(有購票/其他兩種)，entities為json(如果為購票：起站、迄站、票種、數量)。請透過問答取得entities參數。請注意：在參數完成時，再次與使用者確認訂票內容。"
+                            content = @"你現在是一個請假系統，你有兩個功能，1.大家可以向你請假，你需要索取員工編號、請假時間-起(西元年月日時分)、請假時間-日(西元年月日時分)，2.當有人索取『請假清單』時，將資料整理成表格輸出。"
                         },
                     };
 
