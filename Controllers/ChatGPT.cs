@@ -50,25 +50,25 @@ namespace isRock.Template
                     {
                         new ChatMessage {
                             role = Role.system ,
-                            content = @"你現在是一個會判斷intent entities的AI，並以json格式回覆我，不需要其他說明。key有intent為字串(有購票/客訴/其他三種)，entities為json(如果為購票，其內容對應起站、迄站、票種、數量。如果為客訴，其內容對應商品名稱、數量、不滿原因，其他為空)，text為字串(user內容)"
+                            content = @"你現在是一個會判斷intent entities的AI，key有intent為字串(有購票/其他兩種)，entities為json(如果為購票：起站、迄站、票種、數量)。請透過問答取得entities參數。請注意：在參數完成時，再次與使用者確認訂票內容。"
                         },
                     };
 
             //添加歷史對話紀錄
-            // foreach (var HistoryMessageItem in chatHistory)
-            // {
-            //     //添加一組對話紀錄
-            //     messages.Add(new ChatMessage()
-            //     {
-            //         role = Role.user,
-            //         content = HistoryMessageItem.UserMessage
-            //     });
-            //     messages.Add(new ChatMessage()
-            //     {
-            //         role = Role.assistant,
-            //         content = HistoryMessageItem.ResponseMessage
-            //     });
-            // }
+            foreach (var HistoryMessageItem in chatHistory)
+            {
+                //添加一組對話紀錄
+                messages.Add(new ChatMessage()
+                {
+                    role = Role.user,
+                    content = HistoryMessageItem.UserMessage
+                });
+                messages.Add(new ChatMessage()
+                {
+                    role = Role.assistant,
+                    content = HistoryMessageItem.ResponseMessage
+                });
+            }
             messages.Add(new ChatMessage()
             {
                 role = Role.user,
