@@ -1,14 +1,13 @@
-//基本的 OpenAI ChatGPT WebHook
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using System.Net.Http;
 
 namespace isRock.Template
 {
@@ -58,7 +57,7 @@ namespace isRock.Template
     {
         const string AzureOpenAIEndpoint = "https://testopenai202303.openai.azure.com";  //👉replace it with your Azure OpenAI Endpoint
         const string AzureOpenAIModelName = "gpt35"; //👉repleace it with your Azure OpenAI Model Name
-        const string AzureOpenAIToken = "e36f3396dee8495eaf8c909440da94da"; //👉repleace it with your Azure OpenAI Token
+        const string AzureOpenAIToken = "b878253b12344f709b8d26df1c36a092"; //👉repleace it with your Azure OpenAI Token
         const string AzureOpenAIVersion = "2023-03-15-preview";  //👉replace  it with your Azure OpenAI Model Version
 
         [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
@@ -73,7 +72,7 @@ namespace isRock.Template
             var client = new HttpClient();
 
             // 設定 API 網址
-            var apiUrl = $"https://testopenai202303.openai.azure.com/openai/deployments/gpt35/chat/completions?api-version=2023-03-15-preview";
+            var apiUrl = $"{endpoint}/openai/deployments/{modelName}/chat/completions?api-version={apiVersion}";
 
             // 設定 HTTP request headers
             client.DefaultRequestHeaders.Add("api-key", apiKey);
@@ -104,74 +103,23 @@ namespace isRock.Template
                         new {
                             role = ChatGPT.role.system ,
                             content = @"
-                                你是餐飲店的客服機器人，會回答客戶詢問的餐點問題，並且推薦讓店裡獲利最高的產品。你也能處裡客戶的抱怨和申訴，安撫客戶情緒。
-                                目前店裡面所販賣的產品有底下這些:
-                                大亨堡，45元
-                                麥香雞，36元
-                                蛋餅，27元
-                                可麗餅，50元
-                                飯糰，45元
-                                而飲料有底下這些:
-                                可樂，55元
-                                紅茶，35元
-                                奶茶，45元
-                                店裡沒有套餐，只能把餐點和飲料搭配銷售，這樣搭配沒有折扣。此外，跟客人推薦餐點時，必須是上述的清單中的餐點。
-                                目前唯一的優惠是周日早上買一送一，只限單點大亨堡才有這個優惠。
+                                假設你是一個專業的客戶服務人員，對於客戶非常有禮貌、也能夠安撫客戶的抱怨情緒、
+                                盡量讓客戶感到被尊重、節盡可能的回覆客戶的疑問。
+
+                                請檢視底下的客戶訊息，以最親切有禮的方式回應。
+
+                                但回應時，請注意以下幾點:
+                                * 不要說 '感謝你的來信' 之類的話，因為客戶是從對談視窗輸入訊息的，不是寫信來的
+                                * 不能過度承諾
+                                * 要同理客戶的情緒
+                                * 要能夠盡量解決客戶的問題
+                                * 不要以回覆信件的格式書寫，請直接提供對談機器人可以直接給客戶的回覆
                                 ----------------------
-                            "
-                        },
-
-                        new {
-                            role = ChatGPT.role.user,
-                            content = "你可以點選蛋餅，只需要27元"
+"
                         },
                         new {
-                            role = ChatGPT.role.assistant,
-                            content = "請告訴我最便宜的餐點價格。"
-                        },
-
-                        new {
-                            role = ChatGPT.role.user,
-                            content = "有什麼好吃的餐點嗎?"
-                        },
-                        new {
-                            role = ChatGPT.role.assistant,
-                            content = @"這個問題很主觀，不同的人有不同的口味喜好，以下是我個人的推薦:
-1. 大亨堡：這是我們餐廳的招牌餐點，肉質鮮美，搭配特製的醬料非常美味
-2. 麥香雞：這是一個很受歡迎的餐點，雞肉鮮嫩，外皮酥脆，非常適合當作午餐或晚餐 
-3. 可麗餅：這是一個很受歡迎的早餐餐點，口感軟嫩，搭配楓糖漿和奶油非常美味"
-                        },
-                        
-                        new {
-                            role = ChatGPT.role.user,
-                            content = "我想要吃飽一點，你可以推薦我豐盛的套餐嗎?"
-                        },
-                        new {
-                            role = ChatGPT.role.assistant,
-                            content = @"很抱歉，我們店裡沒有套餐，只能把餐點和飲料搭配銷售。
-但是，如果你想吃得飽一點，我建議你可以考慮以下搭配：
-1. 大亨堡 + 可樂：肉質鮮美，搭配可樂口感更佳。
-2. 麥香雞 + 紅茶：雞肉鮮嫩，搭配紅茶口感更清爽。
-3. 飯糰 + 奶茶：飯糰營養豐富，搭配奶茶口感更香濃。
-希望這些搭配可以滿足你的食慾需求！"
-                        },
-                        
-                        new {
-                            role = ChatGPT.role.user,
-                            content = "這些搭配套餐分別是多少錢?"
-                        },
-                        new {
-                            role = ChatGPT.role.assistant,
-                            content = @"很抱歉，我剛才的回答有點不清楚，我重新提供給你更詳細的價格資訊:
-1. 大亨堡 + 可樂 = 100元 (大亨堡 45元 + 可樂 55元)
-2. 麥香雞 + 紅茶 = 71元 (麥香雞 36元 + 紅茶 35元)
-3. 飯糰 + 奶茶 = 90元 (飯糰 45元 + 奶茶 45元)
-希望這些資訊可以幫助到你！"
-                        },
-
-                        new {
-                            role = ChatGPT.role.user,
-                            content = Message
+                             role = ChatGPT.role.user,
+                             content = Message
                         },
                     }
                 });
